@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">WeChat</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <!-- Strings related to login -->
+    <string name="login_activity_account_hint">账号</string>
+    <string name="login_activity_password_hint">密码</string>
+    <string name="login_activity_login_btn">登陆</string>
+
+    <!-- Strings related to register -->
+    <string name="register_activity_btn">注册</string>
+    <string name="register_activity_name_hint">昵称</string>
+    <string name="register_activity_desc_hint">简介</string>
+
+    <string name="common_personal_account">微信号：</string>
+    <string name="common_personal_signature">个性签名：</string>
+
+    <string name="contact_fragment_new_friend">新的朋友</string>
+</resources>

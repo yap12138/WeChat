@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.ContactFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:id="@+id/cf_new_friend"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ci_iv_thumb"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="8dp"
+            app:srcCompat="@drawable/cf_iv_newfriend" />
+
+        <TextView
+            android:id="@+id/ci_tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="16dp"
+            android:singleLine="true"
+            android:text="@string/contact_fragment_new_friend"
+            android:textAppearance="@android:style/TextAppearance.Material.Widget.TextView.SpinnerItem" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/cf_divider"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/pensive"
+        android:text="我的好友"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cf_new_friend" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/cf_rv_dialogue"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:clipToPadding="false"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cf_divider" />
+
+    <ImageView
+        android:id="@+id/iv_red_point"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/red_point"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="@+id/cf_new_friend"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>

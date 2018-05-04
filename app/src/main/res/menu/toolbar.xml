@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/ma_tb_search"
+        android:title="搜索"
+        app:showAsAction="ifRoom" />
+
+
+    <item android:id="@+id/ma_tb_overflow"
+        android:title="更多"
+        android:icon="@drawable/ma_tb_overflow"
+        app:showAsAction="ifRoom">
+        <!-- item包含menu表示该menu是item下的子菜单 -->
+        <menu>
+            <!-- 将group中的菜单项放于一个组里面 -->
+            <group>
+                <item
+                    android:id="@+id/addfriend"
+                    android:icon="@drawable/ma_tb_addfriend"
+                    android:title="添加朋友"
+                    app:showAsAction="ifRoom" />
+                <item
+                    android:id="@+id/logout"
+                    android:icon="@drawable/nav_ic_logout"
+                    android:title="注销"
+                    app:showAsAction="ifRoom" />
+                <item
+                    android:id="@+id/settings"
+                    android:icon="@drawable/nav_ic_settings"
+                    android:title="设置"
+                    app:showAsAction="ifRoom" />
+            </group>
+        </menu>
+    </item>
+
+</menu>

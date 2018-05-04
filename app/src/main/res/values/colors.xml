@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#353b48</color>
+    <color name="colorPrimaryDark">#2f3640</color>
+    <color name="colorAccent">@android:color/holo_green_light</color>
+    <color name="colorBlackPearl">#1e272e</color>
+    <color name="colorSelected">@android:color/holo_green_dark</color>
+    <color name="colorElectromagnetic">#2f3640</color>
+    <color name="colorInnuendo">#a5b1c2</color>
+    <color name="lynxWhite">#f5f6fa</color>
+    <color name="pensive">#dcdde1</color>
+</resources>

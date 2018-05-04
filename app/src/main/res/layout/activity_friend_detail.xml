@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lynxWhite"
+    tools:context=".activity.FriendDetailActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="14dp"
+        android:background="@android:color/background_light">
+
+        <ImageView
+            android:id="@+id/fda_iv_thumb"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="8dp"
+            app:srcCompat="@drawable/thumb_l" />
+
+        <TextView
+            android:id="@+id/fda_tv_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/fda_iv_thumb"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@+id/fda_iv_thumb"
+            android:text="刘孟莹"
+            android:textColor="@color/colorElectromagnetic"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/fda_tv_label1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/fda_tv_nickname"
+            android:layout_below="@id/fda_tv_nickname"
+            android:layout_marginTop="4dp"
+            android:text="@string/common_personal_account"
+            android:textColor="@color/colorInnuendo"/>
+
+        <TextView
+            android:id="@+id/fda_tv_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/fda_tv_label1"
+            android:layout_alignTop="@id/fda_tv_label1"
+            android:text="IRONlmy"
+            android:singleLine="true"
+            android:textColor="@color/colorInnuendo"/>
+
+        <TextView
+            android:id="@+id/fda_tv_label2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/fda_tv_nickname"
+            android:layout_below="@id/fda_tv_label1"
+            android:layout_marginTop="4dp"
+            android:text="@string/common_personal_signature"
+            android:textColor="@color/colorInnuendo"/>
+
+        <TextView
+            android:id="@+id/fda_tv_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/fda_tv_label2"
+            android:layout_alignTop="@id/fda_tv_label2"
+            android:text="everything is ironic"
+            android:singleLine="true"
+            android:textColor="@color/colorInnuendo"/>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/fda_btn_send"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="75dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/button_selector"
+        android:text="发消息"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/fda_btn_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="75dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/button_selector"
+        android:text="添加到通讯录"
+        android:textColor="@android:color/white" />
+</RelativeLayout>
