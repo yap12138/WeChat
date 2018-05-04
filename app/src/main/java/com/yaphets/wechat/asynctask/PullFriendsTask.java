@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 public class PullFriendsTask extends AsyncTask<Integer, Integer, Integer> {
     private static final String TAG = "PullFriendsTask";
 
-    private CallbackListener _callback;
+    private CallbackListener<Integer> _callback;
 
-    public PullFriendsTask(CallbackListener callback) {
+    public PullFriendsTask(CallbackListener<Integer> callback) {
         this._callback = callback;
     }
 
@@ -34,6 +34,6 @@ public class PullFriendsTask extends AsyncTask<Integer, Integer, Integer> {
 
     @Override
     protected void onPostExecute(Integer integer) {
-        _callback.run();
+        _callback.run(integer);
     }
 }

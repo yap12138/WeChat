@@ -111,9 +111,9 @@ public class LoginActivity extends AppCompatActivity {
 
         _loadingDialog = DialogUtils.createLoadingDialog(LoginActivity.this, "");
         //TODO 拉取好友信息，非拉取所有数据，先和本地数据库比对（通过最新更新时间戳比对），有更新则拉回来
-        new PullFriendsTask(new CallbackListener() {
+        new PullFriendsTask(new CallbackListener<Integer>() {
             @Override
-            public void run() {
+            public void run(Integer arg) {
                 barrier++;
                 Message msg = _handler.obtainMessage(PREPARE_OK);
                 _handler.sendMessage(msg);

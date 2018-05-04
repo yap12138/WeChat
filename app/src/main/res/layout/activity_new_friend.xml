@@ -74,7 +74,8 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rcv_new_friend"
         android:layout_width="0dp"
-        android:layout_height="442dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:background="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

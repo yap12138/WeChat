@@ -18,8 +18,10 @@ import com.yaphets.wechat.activity.NewFriendActivity;
 import com.yaphets.wechat.adapter.ContactAdapter;
 import com.yaphets.wechat.asynctask.PullFriendRequestTask;
 import com.yaphets.wechat.database.entity.Apply;
+import com.yaphets.wechat.database.entity.Friend;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,9 +32,10 @@ public class ContactFragment extends BaseFragment {
     private LinearLayout _newFriend;
     private ImageView _redPoint;
 
-    private ArrayList<Apply> _applies = new ArrayList<>(0);
+    private List<Apply> _applies = new ArrayList<>();
 
     public ContactFragment() {
+
         // Required empty public constructor
     }
 
@@ -53,14 +56,11 @@ public class ContactFragment extends BaseFragment {
             if (!ClientApp.getApplyNotifyBadge().isHidden())
                 ClientApp.getApplyNotifyBadge().hide();
             Intent intent = new Intent(mContext, NewFriendActivity.class);
-            intent.putParcelableArrayListExtra("applyList", _applies);
+            //intent.putParcelableArrayListExtra("applyList", _applies);
             startActivity(intent);
         });
 
-        new PullFriendRequestTask(_applies, () -> {
-            ClientApp.getApplyNotifyBadge().setText(String.valueOf(_applies.size())).show();
-            _redPoint.setVisibility(View.VISIBLE);
-        }).execute();
+        new PullFriendRequestTask(_applies, this::notifyApply).execute();
     }
 
     @Override
@@ -70,5 +70,24 @@ public class ContactFragment extends BaseFragment {
         _newFriend = root.findViewById(R.id.cf_new_friend);
         _redPoint = root.findViewById(R.id.iv_red_point);
         return root;
+    }
+
+    public List<Apply> getApplies() {
+        return _applies;
+    }
+
+    public void notifyApply(int size) {
+        _redPoint.setVisibility(View.VISIBLE);
+        ClientApp.getApplyNotifyBadge().setText(String.valueOf(size)).show();
+    }
+
+    public void AddFriend(Friend friend) {
+        friend.saveOrUpdate();
+        ClientApp._friendsList.add(friend);
+        notifyDataSetChange();
+    }
+
+    private void notifyDataSetChange() {
+        _contactList.getAdapter().notifyDataSetChanged();
     }
 }

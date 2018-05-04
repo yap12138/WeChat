@@ -7,8 +7,6 @@ import com.yaphets.wechat.database.entity.Apply;
 import com.yaphets.wechat.database.entity.Friend;
 import com.yaphets.wechat.util.HttpUtils;
 
-import org.json.JSONObject;
-
 import java.sql.Blob;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -48,34 +46,38 @@ public class MySqlHelper {
         }).start();
     }
 
-    public static JSONObject searchFriend(String usernameArg) {
+    public static Friend searchFriend(String usernameArg) {
         Connection con = null;
         PreparedStatement ps = null;
-        JSONObject json = null;
+        Friend friend = null;
 
         try {
             con = MySqlDAO.getConnection();
-            String sql = "SELECT username, nickname, thumb, description, friendshipPolicy FROM user WHERE username=?";
+            String sql = "SELECT username, nickname, thumb, description, friendshipPolicy, update_time FROM user WHERE username=?";
             ps = con.prepareStatement(sql);
             ps.setString(1, usernameArg);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                json = new JSONObject();
-                json.put("username", rs.getString(1));
-                json.put("nickname", rs.getString(2));
-                json.put("description", rs.getString(4));
-                json.put("friendshipPolicy", rs.getInt(5));
+                String username = rs.getString(1);
+                String nickname = rs.getString(2);
+                String description = rs.getString(4);
+                int friendshipPolicy = rs.getInt(5);
+                long update_time = rs.getTimestamp(6).getTime();
                 Blob thumb = rs.getBlob(3);
-                if (thumb != null) {
-                    json.put("thumb", thumb.getBytes(1, (int) thumb.length()));
+                if (thumb == null || thumb.length() == 0) {
+                    friend = new Friend(username, nickname, description, null);
+                } else {
+                    friend = new Friend(username, nickname, description, thumb.getBytes(1, (int) thumb.length()));
                 }
+                friend.setFriendshipPolicy(friendshipPolicy);
+                friend.setUpdateTime(update_time);
             }
         } catch (Exception e) {
             Log.e(TAG, "searchFriend: " + e.getMessage(), e);
         } finally {
             MySqlDAO.release(con, ps);
         }
-        return json;
+        return friend;
     }
 
     public static List<Friend> getFriends(List<Friend> localList, Map<String, Friend> friendMap) {
@@ -170,12 +172,52 @@ public class MySqlHelper {
                     apply = new Apply(fromId, username, nickname,thumb.getBytes(1, (int) thumb.length()), status, msg);
                 }
                 apply.save();
-                applies.add(apply);
+                applies.add(0, apply);
             }
         } catch (Exception e) {
             Log.e(TAG, "getApply: " + e.getMessage(), e);
         } finally {
             MySqlDAO.release(con, cs);
         }
+    }
+
+    public static Apply getApply(String f_uname) {
+        Connection con = null;
+        CallableStatement cs = null;
+        Apply apply = null;
+
+        try {
+            con = MySqlDAO.getConnection();
+            String sql = "{CALL query_apply_one(?, ?)}";
+            cs = con.prepareCall(sql);
+            cs.setInt(1, ClientApp.get_loginUserinfo().get_uid());
+            cs.setString(2, f_uname);
+            ResultSet resultSet = cs.executeQuery();
+            String username, nickname, msg;
+            int fromId;
+            byte status;
+            Blob thumb;
+
+            while (resultSet.next()) {
+                fromId = resultSet.getInt("fromId");
+                username = resultSet.getString("username");
+                nickname = resultSet.getString("nickname");
+                thumb = resultSet.getBlob("thumb");
+                status = resultSet.getByte("status");
+                msg = resultSet.getString("msg");
+
+                if (thumb == null || thumb.length() == 0) {
+                    apply = new Apply(fromId, username, nickname,null, status, msg);
+                } else {
+                    apply = new Apply(fromId, username, nickname,thumb.getBytes(1, (int) thumb.length()), status, msg);
+                }
+                apply.save();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "getApply: " + e.getMessage(), e);
+        } finally {
+            MySqlDAO.release(con, cs);
+        }
+        return apply;
     }
 }

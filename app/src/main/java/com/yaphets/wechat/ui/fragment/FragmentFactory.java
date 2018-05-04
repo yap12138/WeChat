@@ -27,4 +27,28 @@ public class FragmentFactory {
         }
         return baseFragment;
     }
+
+    public static ChatFragment getChatFragmentInstance() {
+        ChatFragment cf = (ChatFragment) mBaseFragments[0];
+        if (cf == null) {
+            cf = new ChatFragment();
+        }
+        return cf;
+    }
+
+    public static ContactFragment getContactFragmentInstance() {
+        ContactFragment cf = (ContactFragment) mBaseFragments[1];
+        if (cf == null) {
+            cf = new ContactFragment();
+        }
+        return cf;
+    }
+
+    public static DiscoveryFragment getDiscoveryFragmentInstance() {
+        DiscoveryFragment df = (DiscoveryFragment) mBaseFragments[2];
+        if (df == null) {
+            df = new DiscoveryFragment();
+        }
+        return df;
+    }
 }

@@ -9,7 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.yaphets.wechat.R;
+import com.yaphets.wechat.asynctask.AcceptFriendTask;
 import com.yaphets.wechat.database.entity.Apply;
+import com.yaphets.wechat.database.entity.Friend;
+import com.yaphets.wechat.ui.fragment.ContactFragment;
+import com.yaphets.wechat.ui.fragment.FragmentFactory;
+import com.yaphets.wechat.util.CallbackListener;
 
 import java.util.List;
 
@@ -25,9 +30,7 @@ public class ApplyAdapter extends RecyclerView.Adapter<ApplyAdapter.ViewHolder> 
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_new_friend, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
-        if (viewType == 0) {
-            viewHolder.accepted.setVisibility(View.INVISIBLE);
-        } else if (viewType == 1) {
+        if (viewType == 1) {
             viewHolder.accept.setVisibility(View.GONE);
         }
         return viewHolder;
@@ -39,9 +42,9 @@ public class ApplyAdapter extends RecyclerView.Adapter<ApplyAdapter.ViewHolder> 
         holder.thumb.setImageBitmap(apply.getThumbBitmap());
         holder.nickname.setText(apply.getNickname());
         holder.msg.setText(apply.getMsg());
-        if (apply.getStatus() == 1) {
-            //TODO 接受好友添加
-            holder.accept.setOnClickListener(new AcceptListener(apply));
+        if (apply.getStatus() == 0) {
+            //接受好友添加
+            holder.accept.setOnClickListener(new AcceptListener(apply, holder));
         }
     }
 
@@ -74,14 +77,30 @@ public class ApplyAdapter extends RecyclerView.Adapter<ApplyAdapter.ViewHolder> 
 
     static class AcceptListener implements View.OnClickListener {
         Apply _apply;
+        ViewHolder holder;
 
-        AcceptListener(Apply apply) {
+        AcceptListener(Apply apply, ViewHolder holder) {
             this._apply = apply;
+            this.holder = holder;
         }
 
         @Override
         public void onClick(View v) {
+            new AcceptFriendTask(new CallbackListener<Friend>() {
+                @Override
+                public void run(Friend arg) {
+                    ContactFragment cf = FragmentFactory.getContactFragmentInstance();
+                    cf.AddFriend(arg);
 
+                    //取消按钮
+                    holder.accept.setVisibility(View.GONE);
+                    //显示已添加
+                    holder.accepted.setVisibility(View.VISIBLE);
+                    //修改本地Apply
+                    _apply.setStatus(1);
+                    _apply.saveOrUpdate("username = ?", _apply.getUsername());
+                }
+            }).execute(_apply.getFromId(), _apply.getUsername());
         }
     }
 }

@@ -45,6 +45,9 @@ public class HttpUtils {
                 return true;
             }
         } catch (IOException e) {
+            if (e instanceof SocketTimeoutException) {
+                ClientApp._handler.post(() -> Toast.makeText(ClientApp.getContext(), "连接服务器超时", Toast.LENGTH_SHORT).show());
+            }
             Log.e(TAG, "sendHttpRequest: " + e.getMessage(), e);
         } finally {
             if (connection != null)
@@ -97,7 +100,7 @@ public class HttpUtils {
             }
         } catch (IOException e) {
             if (e instanceof SocketTimeoutException) {
-                Toast.makeText(ClientApp.getContext(), "连接服务器超时", Toast.LENGTH_SHORT).show();
+                ClientApp._handler.post(() -> Toast.makeText(ClientApp.getContext(), "连接服务器超时", Toast.LENGTH_SHORT).show());
             }
             Log.e(TAG, "sendHttpRequestForString: " + e.getMessage(), e);
         } finally {
@@ -152,7 +155,7 @@ public class HttpUtils {
             }
         } catch (IOException e) {
             if (e instanceof SocketTimeoutException) {
-                Toast.makeText(ClientApp.getContext(), "连接服务器超时", Toast.LENGTH_SHORT).show();
+                ClientApp._handler.post(() -> Toast.makeText(ClientApp.getContext(), "连接服务器超时", Toast.LENGTH_SHORT).show());
             }
             Log.e(TAG, "sendHttpRequestForBytes: " + e.getMessage(), e);
         } finally {

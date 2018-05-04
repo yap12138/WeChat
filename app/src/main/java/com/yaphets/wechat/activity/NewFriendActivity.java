@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import com.yaphets.wechat.R;
 import com.yaphets.wechat.adapter.ApplyAdapter;
 import com.yaphets.wechat.database.entity.Apply;
+import com.yaphets.wechat.ui.fragment.FragmentFactory;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class NewFriendActivity extends BaseActionBarActivity {
 
     private void initData() {
         //取出添加申请
-        List<Apply> applyList = getIntent().getParcelableArrayListExtra("applyList");
+        List<Apply> applyList = FragmentFactory.getContactFragmentInstance().getApplies();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         _applyList.setLayoutManager(linearLayoutManager);

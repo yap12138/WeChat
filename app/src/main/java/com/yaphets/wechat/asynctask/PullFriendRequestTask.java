@@ -13,9 +13,9 @@ import java.util.List;
 public class PullFriendRequestTask extends AsyncTask<Integer, Integer, Integer> {
 
     private List<Apply> _applies;
-    private CallbackListener _callback;
+    private CallbackListener<Integer> _callback;
 
-    public PullFriendRequestTask(List<Apply> requesApplies, CallbackListener callback) {
+    public PullFriendRequestTask(List<Apply> requesApplies, CallbackListener<Integer> callback) {
         this._applies = requesApplies;
         this._callback = callback;
     }
@@ -23,7 +23,8 @@ public class PullFriendRequestTask extends AsyncTask<Integer, Integer, Integer> 
     @Override
     protected Integer doInBackground(Integer... integers) {
         //先本地取出，再从服务器数据库取
-        _applies.addAll(DataSupport.findAll(Apply.class));
+        //_applies.addAll(DataSupport.findAll(Apply.class));
+        _applies.addAll(DataSupport.order("id desc").find(Apply.class));
         int local = _applies.size();
         MySqlHelper.getApply(_applies);
         return _applies.size() - local;
@@ -32,6 +33,6 @@ public class PullFriendRequestTask extends AsyncTask<Integer, Integer, Integer> 
     @Override
     protected void onPostExecute(Integer integer) {
         if (integer > 0)
-            _callback.run();
+            _callback.run(integer);
     }
 }

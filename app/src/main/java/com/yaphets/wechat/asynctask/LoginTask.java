@@ -39,7 +39,7 @@ public class LoginTask extends AsyncTask<RequestParam, Integer, String> {
     @Override
     protected void onPostExecute(String res) {
         if (res == null) {
-            _callback.onError(null);
+            //_callback.onError(null);
             return;
         }
 
