@@ -53,7 +53,7 @@ public class ReceiveThread implements Runnable {
                         msg = dis.readUTF();
                         //ClientApp._msgHandler.post(new UpdataUI(new MessageEntity(cname, uname, msg, System.currentTimeMillis())));
                         break;
-                    case REPLY_FRIEND: //好友答复 添加好友请求
+                    case REPLY_FRIEND: //TODO (暂时没接到)好友答复 添加好友请求
                         funame = dis.readUTF();
                         Friend friend = MySqlHelper.searchFriend(funame);
                         ClientApp._handler.post(new FriendReply(friend));
@@ -78,7 +78,7 @@ public class ReceiveThread implements Runnable {
         @Override
         public void run() {
             //Toast.makeText(ClientApp.getContext(), "收到来自 " + this.uname + " 的好友申请", Toast.LENGTH_SHORT).show();
-            ContactFragment cf = (ContactFragment)FragmentFactory.createFragment(1);
+            ContactFragment cf = FragmentFactory.getContactFragmentInstance();
             cf.getApplies().add(0, apply);
             cf.notifyApply(1);
         }
