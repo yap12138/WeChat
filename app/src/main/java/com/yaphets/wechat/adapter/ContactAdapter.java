@@ -13,21 +13,34 @@ import com.yaphets.wechat.R;
 import com.yaphets.wechat.activity.FriendDetailActivity;
 import com.yaphets.wechat.database.entity.Friend;
 
-import java.text.CollationKey;
-import java.text.Collator;
-import java.util.Comparator;
-import java.util.List;
+import java.util.Map;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
 
-    private List<Friend> _friendList;
+    private Friend[] _friendList;
 
-    public ContactAdapter(List<Friend> friendList) {
+    private static ContactAdapter mContactAdapter;
+
+    public static ContactAdapter createInstance(Map<String, Friend> friends) {
+        if (mContactAdapter == null) {
+            mContactAdapter = new ContactAdapter(friends);
+        }
+        return mContactAdapter;
+    }
+
+    public static ContactAdapter getInstance() {
+        if (mContactAdapter == null) {
+            throw new RuntimeException("mContactAdapter never create");
+        }
+        return mContactAdapter;
+    }
+
+    private ContactAdapter(Map<String, Friend> friends) {
         /*Map<String, Friend> fmap = friendList.stream().collect(Collectors.toMap(Friend::getNickname, a->a));    //Java 8的新特性
         TreeMap<String, Friend> treeMap = new TreeMap<>(new CollatorComparator());                            //让名字排序
         treeMap.putAll(fmap);*/
-        friendList.sort(new CollatorComparator());
-        this._friendList = friendList;
+        //friendList.sort(new FriendComparator());
+        _friendList = friends.values().toArray(new Friend[0]);
     }
 
     @Override
@@ -38,7 +51,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Friend friend = _friendList.get(position);
+        Friend friend = _friendList[position];
         holder.thumb.setImageBitmap(friend.getThumbBitmap());
         holder.nickname.setText(friend.getNickname());
         holder.itemView.setOnClickListener(new HolderClickListener(friend));
@@ -46,7 +59,12 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return _friendList == null?0:_friendList.size();
+        return _friendList == null?0:_friendList.length;
+    }
+
+    public void updateDataSet(Map<String, Friend> friends) {
+        _friendList = friends.values().toArray(_friendList);
+        notifyDataSetChanged();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -69,19 +87,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(ClientApp.getContext(), FriendDetailActivity.class);
-            intent.putExtra("friend", friend);
+            intent.putExtra("friend", friend.getNickname());
             ClientApp.getContext().startActivity(intent);
-        }
-    }
-
-    static class CollatorComparator implements Comparator<Friend> {
-        Collator collator = Collator.getInstance();
-
-        public int compare(Friend element1, Friend element2) {
-            //TODO 为什么在这里英文在后面
-            CollationKey key1 = collator.getCollationKey(element1.getNickname());
-            CollationKey key2 = collator.getCollationKey(element2.getNickname());
-            return key1.compareTo(key2);
         }
     }
 }

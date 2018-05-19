@@ -5,8 +5,8 @@ import android.os.AsyncTask;
 import com.yaphets.wechat.ClientApp;
 import com.yaphets.wechat.database.dao.MySqlHelper;
 import com.yaphets.wechat.database.entity.Friend;
-import com.yaphets.wechat.util.CallbackListener;
 import com.yaphets.wechat.util.HttpUtils;
+import com.yaphets.wechat.util.listener.CallbackListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;

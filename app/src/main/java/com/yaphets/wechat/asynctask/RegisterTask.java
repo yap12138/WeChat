@@ -4,9 +4,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.yaphets.wechat.ClientApp;
-import com.yaphets.wechat.util.HttpCallbackListener;
 import com.yaphets.wechat.util.HttpUtils;
 import com.yaphets.wechat.util.RequestParam;
+import com.yaphets.wechat.util.listener.HttpCallbackListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;

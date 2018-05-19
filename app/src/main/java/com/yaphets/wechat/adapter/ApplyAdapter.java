@@ -11,10 +11,8 @@ import android.widget.TextView;
 import com.yaphets.wechat.R;
 import com.yaphets.wechat.asynctask.AcceptFriendTask;
 import com.yaphets.wechat.database.entity.Apply;
-import com.yaphets.wechat.database.entity.Friend;
 import com.yaphets.wechat.ui.fragment.ContactFragment;
 import com.yaphets.wechat.ui.fragment.FragmentFactory;
-import com.yaphets.wechat.util.CallbackListener;
 
 import java.util.List;
 
@@ -86,20 +84,17 @@ public class ApplyAdapter extends RecyclerView.Adapter<ApplyAdapter.ViewHolder> 
 
         @Override
         public void onClick(View v) {
-            new AcceptFriendTask(new CallbackListener<Friend>() {
-                @Override
-                public void run(Friend arg) {
-                    ContactFragment cf = FragmentFactory.getContactFragmentInstance();
-                    cf.AddFriend(arg);
+            new AcceptFriendTask(arg -> {
+                ContactFragment cf = FragmentFactory.getContactFragmentInstance();
+                cf.AddFriend(arg);
 
-                    //取消按钮
-                    holder.accept.setVisibility(View.GONE);
-                    //显示已添加
-                    holder.accepted.setVisibility(View.VISIBLE);
-                    //修改本地Apply
-                    _apply.setStatus(1);
-                    _apply.saveOrUpdate("username = ?", _apply.getUsername());
-                }
+                //取消按钮
+                holder.accept.setVisibility(View.GONE);
+                //显示已添加
+                holder.accepted.setVisibility(View.VISIBLE);
+                //修改本地Apply
+                _apply.setStatus(1);
+                _apply.saveOrUpdate("username = ?", _apply.getUsername());
             }).execute(_apply.getFromId(), _apply.getUsername());
         }
     }

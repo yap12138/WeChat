@@ -1,13 +1,25 @@
 package com.yaphets.wechat.service;
 
+import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 
 import com.yaphets.wechat.ClientApp;
+import com.yaphets.wechat.R;
+import com.yaphets.wechat.activity.CommunicateActivity;
+import com.yaphets.wechat.adapter.DialogueAdapter;
 import com.yaphets.wechat.database.dao.MySqlHelper;
 import com.yaphets.wechat.database.entity.Apply;
 import com.yaphets.wechat.database.entity.Friend;
+import com.yaphets.wechat.database.entity.Message;
 import com.yaphets.wechat.ui.fragment.ContactFragment;
 import com.yaphets.wechat.ui.fragment.FragmentFactory;
+import com.yaphets.wechat.util.MyActivityManager;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
@@ -23,7 +35,7 @@ public class ReceiveThread implements Runnable {
 
     private Socket _socket;
 
-    public ReceiveThread(Socket socket) {
+    ReceiveThread(Socket socket) {
         this._socket = socket;
     }
 
@@ -33,8 +45,6 @@ public class ReceiveThread implements Runnable {
         DataInputStream dis = null;
 
         int responseCode;
-        String funame;
-        String msg = null;
         //String uname = ClientApp.get_loginUserinfo().get_nickname();
         try {
             bis = new BufferedInputStream(_socket.getInputStream());
@@ -45,19 +55,31 @@ public class ReceiveThread implements Runnable {
                 responseCode = dis.readInt();
                 switch (responseCode) {
                     case REQUEST_FRIEND: //请求添加好友的提示
-                        funame = dis.readUTF();
+                    {
+                        String funame = dis.readUTF();
                         Apply receive = MySqlHelper.getApply(funame);
                         ClientApp._handler.post(new FriendRequest(receive));
                         break;
-                    case SEND_MSG:  //TODO 接收消息
-                        msg = dis.readUTF();
-                        //ClientApp._msgHandler.post(new UpdataUI(new MessageEntity(cname, uname, msg, System.currentTimeMillis())));
+                    }
+                    case SEND_MSG:  //接收消息
+                    {
+                        String msg = dis.readUTF();
+                        String fnname = dis.readUTF();
+                        Friend friend = ClientApp._friendsMap.get(fnname);
+                        Message message = new Message(friend, msg, System.currentTimeMillis(), Message.TYPE_RECEIVE);
+                        friend.getMessages().add(message);
+                        message.save();
+
+                        ClientApp._handler.post(new ReceiveMsg(message));
                         break;
-                    case REPLY_FRIEND: //TODO (暂时没接到)好友答复 添加好友请求
-                        funame = dis.readUTF();
+                    }
+                    case REPLY_FRIEND: //好友答复 添加好友请求
+                    {
+                        String funame = dis.readUTF();
                         Friend friend = MySqlHelper.searchFriend(funame);
                         ClientApp._handler.post(new FriendReply(friend));
                         break;
+                    }
                     case FOCUS_LOGOUT: //TODO 强制下线
                         break;
                 }
@@ -98,38 +120,57 @@ public class ReceiveThread implements Runnable {
         }
     }
 
-    /*class UpdataUI implements Runnable {
-        private MessageEntity _msg;
+    static class ReceiveMsg implements Runnable {
+        private Message _msg;
 
-        public UpdataUI(MessageEntity msg) {
+        ReceiveMsg(Message msg) {
             this._msg = msg;
         }
 
         @Override
         public void run() {
-            ClientApp._msgAdapter.add(_msg);
-            _msg.save();
-
+            DialogueAdapter.getInstance().sortDataSetWithNotify();
             Context ctx = ClientApp.getContext();
+            Activity activity = MyActivityManager.getInstance().getCurrentActivity();
+            if (activity instanceof CommunicateActivity) {
+                CommunicateActivity communicateActivity = (CommunicateActivity) activity;
+                String fname = communicateActivity.getFnname();
+                if (fname.equals(_msg.getFriend().getNickname())) {
+                    communicateActivity.notifyListChange();
+                    return;
+                }
+            }
+            makeNotification(ctx);
+        }
 
-            Intent intent = new Intent(ctx, MainActivity.class);
-            intent.putExtra("receiveMsg", true);
+        private void makeNotification(Context ctx) {
+
+            Intent intent = new Intent(ctx, CommunicateActivity.class);
+            intent.putExtra("fri_key", _msg.getFriend().getNickname());
             PendingIntent pi = PendingIntent.getActivity(ctx, 0, intent, 0);
 
+
             NotificationManager manager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
-            Notification notification = new Notification.Builder(ctx)
-                    .setContentTitle("来自" + _msg.getFname() + "的一条消息")
+            Notification.Builder builder = new Notification.Builder(ctx);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                builder = new Notification.Builder(ctx, null);
+            }
+
+            Notification notification = builder
+                    .setContentTitle("来自" + _msg.getFriend().getNickname() + "的一条消息")
                     .setContentText(_msg.getMsg())
                     .setWhen(_msg.getTimestamp())
                     .setSmallIcon(R.drawable.tab_message)
                     .setTicker(_msg.getMsg())                   //状态栏文字
-                    .setLargeIcon(ClientApp.get_coupleUserinfo().get_thumb())
+                    .setLargeIcon(_msg.getFriend().getThumbBitmap())
                     .setContentIntent(pi)
                     .setDefaults(Notification.DEFAULT_ALL)      //振动、铃声、LED
                     .setAutoCancel(true)
                     .setPriority(Notification.PRIORITY_MAX)     //横幅显示
                     .build();
-            manager.notify(1, notification);
+            assert manager != null;
+            manager.notify(_msg.getFriend().hashCode(), notification);
         }
-    }*/
+    }
 }

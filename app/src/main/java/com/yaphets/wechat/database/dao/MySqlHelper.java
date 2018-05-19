@@ -5,6 +5,7 @@ import android.util.Log;
 import com.yaphets.wechat.ClientApp;
 import com.yaphets.wechat.database.entity.Apply;
 import com.yaphets.wechat.database.entity.Friend;
+import com.yaphets.wechat.database.entity.Message;
 import com.yaphets.wechat.util.HttpUtils;
 
 import java.sql.Blob;
@@ -12,6 +13,8 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -80,7 +83,7 @@ public class MySqlHelper {
         return friend;
     }
 
-    public static List<Friend> getFriends(List<Friend> localList, Map<String, Friend> friendMap) {
+    public static List<Friend> getFriends(Map<String, Friend> friendMap) {
         Connection con = null;
         CallableStatement cs = null;
 
@@ -109,7 +112,7 @@ public class MySqlHelper {
                     }
                     friend.setUpdateTime(updateTime);
                     friend.save();
-                    localList.add(friend);
+                    friendMap.put(username, friend);
                 } else {
                     Friend oldFriend = friendMap.get(username);
                     if (oldFriend.getUpdateTime() >= updateTime) {
@@ -135,7 +138,7 @@ public class MySqlHelper {
         } finally {
             MySqlDAO.release(con, cs);
         }
-        return localList;
+        return new ArrayList<>(friendMap.values());
     }
 
     /**
@@ -219,5 +222,35 @@ public class MySqlHelper {
             MySqlDAO.release(con, cs);
         }
         return apply;
+    }
+
+    public static List<Message> getUnreceiveMsg() {
+        Connection con = null;
+        CallableStatement cs = null;
+        ResultSet rs;
+        ArrayList<Message> list = new ArrayList<>();
+        try {
+            con = MySqlDAO.getConnection();
+            String sql = "{CALL query_unreceive_msg(?)}";
+            cs = con.prepareCall(sql);
+            cs.setInt(1, ClientApp.get_loginUserinfo().get_uid());
+            rs =  cs.executeQuery();
+
+            while (rs.next()) {
+                String fname = rs.getString(1);
+                String msg = rs.getString(2);
+                long sendTime = rs.getTimestamp(3).getTime();
+                Friend friend = ClientApp._friendsMap.get(fname);
+                Message temp = new Message(friend, msg, sendTime, Message.TYPE_RECEIVE);
+                friend.getMessages().add(temp);
+                temp.save();
+                list.add(temp);
+            }
+        } catch (SQLException e) {
+            Log.e(TAG, "getUnreceiveMsg: " + e.getMessage(), e);
+        } finally {
+            MySqlDAO.release(con, cs);
+        }
+        return list;
     }
 }

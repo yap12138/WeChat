@@ -29,6 +29,7 @@ import java.util.List;
 public class ContactFragment extends BaseFragment {
 
     private RecyclerView _contactList;
+    private ContactAdapter _adapter;
     private LinearLayout _newFriend;
     private ImageView _redPoint;
 
@@ -45,8 +46,8 @@ public class ContactFragment extends BaseFragment {
         _contactList.setLayoutManager(linearLayoutManager);
 
         //load contact
-        ContactAdapter adapter = new ContactAdapter(ClientApp._friendsList);
-        _contactList.setAdapter(adapter);
+        _adapter = ContactAdapter.createInstance(ClientApp._friendsMap);
+        _contactList.setAdapter(_adapter);
         _contactList.addItemDecoration(new DividerItemDecoration(mContext,DividerItemDecoration.VERTICAL));
 
         //new friend callback
@@ -76,18 +77,25 @@ public class ContactFragment extends BaseFragment {
         return _applies;
     }
 
+    /**
+     * 提醒有size个新好友申请
+     * @param size
+     * 新好友申请的个数
+     */
     public void notifyApply(int size) {
         _redPoint.setVisibility(View.VISIBLE);
         ClientApp.getApplyNotifyBadge().setText(String.valueOf(size)).show();
     }
 
+    /**
+     * 添加好友并保存好友信息至本地数据库，更新通讯录界面
+     * @param friend
+     * 新好友
+     */
     public void AddFriend(Friend friend) {
         friend.saveOrUpdate();
-        ClientApp._friendsList.add(friend);
-        notifyDataSetChange();
-    }
+        ClientApp._friendsMap.put(friend.getNickname(), friend);
 
-    private void notifyDataSetChange() {
-        _contactList.getAdapter().notifyDataSetChanged();
+        _adapter.updateDataSet(ClientApp._friendsMap);
     }
 }

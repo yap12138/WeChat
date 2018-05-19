@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <litepal>
     <dbname value="client.db" />
-    <version value="1"/>
+    <version value="3"/>
     <list>
         <mapping class="com.yaphets.wechat.database.entity.Friend"/>
         <mapping class="com.yaphets.wechat.database.entity.Apply"/>
+        <mapping class="com.yaphets.wechat.database.entity.Message"/>
     </list>
 </litepal>

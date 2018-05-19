@@ -22,10 +22,10 @@ import com.yaphets.wechat.asynctask.LoginTask;
 import com.yaphets.wechat.asynctask.PullFriendsTask;
 import com.yaphets.wechat.database.dao.MySqlHelper;
 import com.yaphets.wechat.database.entity.UserInfo;
-import com.yaphets.wechat.util.CallbackListener;
 import com.yaphets.wechat.util.DialogUtils;
-import com.yaphets.wechat.util.HttpCallbackListener;
 import com.yaphets.wechat.util.RequestParam;
+import com.yaphets.wechat.util.listener.CallbackListener;
+import com.yaphets.wechat.util.listener.HttpCallbackListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -110,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         _loadingDialog = DialogUtils.createLoadingDialog(LoginActivity.this, "");
-        //TODO 拉取好友信息，非拉取所有数据，先和本地数据库比对（通过最新更新时间戳比对），有更新则拉回来
+        //拉取好友信息，非拉取所有数据，先和本地数据库比对（通过最新更新时间戳比对），有更新则拉回来
         new PullFriendsTask(new CallbackListener<Integer>() {
             @Override
             public void run(Integer arg) {
@@ -163,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
         user.set_password(ClientApp._password);
         ClientApp.set_loginUserinfo(user);
 
-        app.setLoginShared(ClientApp._username, ClientApp._serverIP);
+        app.setLoginShared(ClientApp._username);
 
         SharedPreferences saveShared = app.getLoginShared();
         SharedPreferences.Editor editor = saveShared.edit();

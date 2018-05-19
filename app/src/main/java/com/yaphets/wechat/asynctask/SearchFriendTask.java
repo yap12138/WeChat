@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 
 import com.yaphets.wechat.database.dao.MySqlHelper;
 import com.yaphets.wechat.database.entity.Friend;
-import com.yaphets.wechat.util.HttpCallbackListener;
+import com.yaphets.wechat.util.listener.HttpCallbackListener;
 
 public class SearchFriendTask extends AsyncTask<String, Integer, Friend> {
     private static final String TAG = "SearchFriendTask";

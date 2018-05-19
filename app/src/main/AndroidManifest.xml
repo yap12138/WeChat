@@ -53,12 +53,16 @@
         <activity
             android:name=".activity.FriendDetailActivity"
             android:label="详细资料"
-            android:theme="@style/ActionBarTheme"/>
+            android:theme="@style/ActionBarTheme" />
         <activity
             android:name=".activity.NewFriendActivity"
             android:label="新的朋友"
             android:theme="@style/ActionBarTheme" />
-
+        <activity
+            android:name=".activity.CommunicateActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:launchMode="singleTask"
+            android:theme="@style/ActionBarTheme"/>
     </application>
 
 </manifest>

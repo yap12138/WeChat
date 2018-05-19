@@ -39,9 +39,9 @@ public class HeartBeatService extends Service {
             public void run() {
                 try {
                     socket = new Socket(ClientApp._serverIP, ClientApp._serverPort);
-
+                    //心跳线程
                     new Thread(new HeartThread(socket)).start();
-                    //TODO
+                    //接收服务器的数据包
                     new Thread(new ReceiveThread(socket)).start();
                 } catch (IOException e) {
                     e.printStackTrace();

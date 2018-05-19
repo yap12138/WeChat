@@ -9,12 +9,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.yaphets.wechat.ClientApp;
 import com.yaphets.wechat.R;
 import com.yaphets.wechat.asynctask.AddFriendTask;
 import com.yaphets.wechat.database.entity.Friend;
+import com.yaphets.wechat.util.listener.OpenDialogueListener;
 
 public class FriendDetailActivity extends BaseActionBarActivity {
     private Friend _friend;
@@ -24,7 +24,7 @@ public class FriendDetailActivity extends BaseActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_detail);
 
-        _friend = getIntent().getParcelableExtra("friend");
+        _friend = ClientApp._friendsMap.get(getIntent().getStringExtra("friend"));
         initView();
         initData();
     }
@@ -43,10 +43,10 @@ public class FriendDetailActivity extends BaseActionBarActivity {
     private void initData() {
         Button add_btn = findViewById(R.id.fda_btn_add);
         Button send_btn = findViewById(R.id.fda_btn_send);
-        if (ClientApp._friendsList.contains(_friend)) {
+        if (ClientApp._friendsMap.containsValue(_friend)) {
             add_btn.setVisibility(View.GONE);
-            //TODO 打开聊天 逻辑处理
-            Toast.makeText(FriendDetailActivity.this, "聊天即将上线", Toast.LENGTH_SHORT).show();
+            //打开聊天 逻辑处理
+            send_btn.setOnClickListener(new OpenDialogueListener(_friend));
         } else {
             send_btn.setVisibility(View.GONE);
             if (_friend.getFriendshipPolicy() == 3) {

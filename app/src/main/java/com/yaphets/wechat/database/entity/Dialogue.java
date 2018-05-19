@@ -1,7 +1,6 @@
 package com.yaphets.wechat.database.entity;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -10,37 +9,29 @@ import java.util.Locale;
 public class Dialogue {
 
     private Friend friend;
-    private List<Message> msgList;
 
-    public Dialogue(Friend friend, List<Message> msgList) {
-        this.friend = friend;
-        if (msgList == null) {
-            this.msgList = new ArrayList<>();
-        } else {
-            this.msgList = msgList;
-        }
-    }
+    private long createTime;
 
     public Dialogue(Friend friend) {
-        this(friend, null);
+        this.friend = friend;
+
+        this.createTime = System.currentTimeMillis();
     }
+
 
     public Friend getFriend() {
         return friend;
     }
 
     public List<Message> getMsgList() {
-        return msgList;
-    }
-
-    public void setMsgList(List<Message> msgList) {
-        this.msgList = msgList;
+        return friend.getMessages();
     }
 
     public String getLastTime() {
+        List<Message> msgList = friend.getMessages();
         SimpleDateFormat dateFormat = new SimpleDateFormat("a h:mm", Locale.CHINA);
         if (msgList.size() == 0) {
-            return dateFormat.format(new Date(System.currentTimeMillis()));
+            return dateFormat.format(new Date(createTime));
         }
 
         Calendar calendar = Calendar.getInstance();
@@ -57,7 +48,18 @@ public class Dialogue {
         return dateFormat.format(date);
     }
 
+    /**
+     * 获取最新消息的时间戳
+     * @return
+     * long类型的时间戳
+     */
+    public long getLastTimestamp() {
+        int lsize = friend.getMessages().size();
+        return lsize==0?createTime:friend.getMessages().get(lsize-1).getTimestamp();
+    }
+
     public String getLastMsg() {
+        List<Message> msgList = friend.getMessages();
         if (msgList.size() == 0 || msgList.get(msgList.size()-1).getMsg() == null) {
             return "";
         }

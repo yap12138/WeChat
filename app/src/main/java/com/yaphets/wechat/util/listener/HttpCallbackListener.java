@@ -1,4 +1,4 @@
-package com.yaphets.wechat.util;
+package com.yaphets.wechat.util.listener;
 
 public interface HttpCallbackListener<T> {
     void onFinish(T paramType);

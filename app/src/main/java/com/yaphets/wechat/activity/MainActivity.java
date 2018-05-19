@@ -28,6 +28,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.ashokvarma.bottomnavigation.TextBadgeItem;
 import com.yaphets.wechat.ClientApp;
 import com.yaphets.wechat.R;
+import com.yaphets.wechat.asynctask.PullMsgTask;
 import com.yaphets.wechat.database.entity.UserInfo;
 import com.yaphets.wechat.service.HeartBeatService;
 import com.yaphets.wechat.ui.fragment.BaseFragment;
@@ -86,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            //TODO 改
             actionBar.setHomeAsUpIndicator(R.drawable.ma_tb_menu);
         }
 
@@ -212,6 +212,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        new PullMsgTask().execute();
     }
 
     @Override
@@ -256,14 +258,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar, menu);
-        /*try {
-            Method method = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
-            method.setAccessible(true);
-            method.invoke(menu, true);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            Log.e(TAG, "onCreateOptionsMenu: " + e.getMessage(), e);
-        }*/
+        getMenuInflater().inflate(R.menu.ma_toolbar, menu);
         return true;
     }
 
@@ -274,7 +269,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "搜索功能敬请期待", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.addfriend:
-                //TODO 添加好友
+                //添加好友
                 Intent intent = new Intent(MainActivity.this, SearchFriendActivity.class);
                 startActivity(intent);
                 break;

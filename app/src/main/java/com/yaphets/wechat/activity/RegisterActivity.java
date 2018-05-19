@@ -9,8 +9,8 @@ import android.widget.Toast;
 
 import com.yaphets.wechat.R;
 import com.yaphets.wechat.asynctask.RegisterTask;
-import com.yaphets.wechat.util.HttpCallbackListener;
 import com.yaphets.wechat.util.RequestParam;
+import com.yaphets.wechat.util.listener.HttpCallbackListener;
 
 public class RegisterActivity extends AppCompatActivity {
 

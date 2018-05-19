@@ -17,7 +17,7 @@ import com.yaphets.wechat.ClientApp;
 import com.yaphets.wechat.R;
 import com.yaphets.wechat.asynctask.SearchFriendTask;
 import com.yaphets.wechat.database.entity.Friend;
-import com.yaphets.wechat.util.HttpCallbackListener;
+import com.yaphets.wechat.util.listener.HttpCallbackListener;
 
 public class SearchFriendActivity extends AppCompatActivity {
     private EditText _searchText;
@@ -58,7 +58,7 @@ public class SearchFriendActivity extends AppCompatActivity {
                         @Override
                         public void onFinish(Friend friend) {
                             Intent intent = new Intent(SearchFriendActivity.this, FriendDetailActivity.class);
-                            intent.putExtra("friend", friend);
+                            intent.putExtra("friend", friend.getNickname());
                             startActivity(intent);
                         }
 

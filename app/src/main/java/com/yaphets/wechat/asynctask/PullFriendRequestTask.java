@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 
 import com.yaphets.wechat.database.dao.MySqlHelper;
 import com.yaphets.wechat.database.entity.Apply;
-import com.yaphets.wechat.util.CallbackListener;
+import com.yaphets.wechat.util.listener.CallbackListener;
 
 import org.litepal.crud.DataSupport;
 
@@ -20,9 +20,15 @@ public class PullFriendRequestTask extends AsyncTask<Integer, Integer, Integer> 
         this._callback = callback;
     }
 
+    /**
+     * 先本地取出申请，再从服务器数据库取
+     * @param integers
+     * 未使用
+     * @return
+     * 返回新收到的申请数目
+     */
     @Override
     protected Integer doInBackground(Integer... integers) {
-        //先本地取出，再从服务器数据库取
         //_applies.addAll(DataSupport.findAll(Apply.class));
         _applies.addAll(DataSupport.order("id desc").find(Apply.class));
         int local = _applies.size();

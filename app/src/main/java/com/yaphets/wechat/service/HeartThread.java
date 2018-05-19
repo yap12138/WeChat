@@ -17,7 +17,7 @@ public class HeartThread implements Runnable {
     private final static int _HEARTBEAT = 1;
     private Socket _socket;
 
-    public HeartThread(Socket socket) {
+    HeartThread(Socket socket) {
         this._socket = socket;
     }
 
@@ -38,7 +38,7 @@ public class HeartThread implements Runnable {
                     //10s发送心跳包
                     Thread.sleep(10000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "run: sleep(10000) :" + e.getMessage(), e);
                 }
 
                 try {
@@ -51,7 +51,7 @@ public class HeartThread implements Runnable {
                     }
                 }
             }
-            Log.d("HeartBeatThread", "exit");
+            Log.d(TAG, "exit");
 
         } catch (IOException e) {
             e.printStackTrace();

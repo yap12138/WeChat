@@ -1,15 +1,21 @@
 package com.yaphets.wechat.database.entity;
 
-public class Message {
+import org.litepal.crud.DataSupport;
+
+public class Message extends DataSupport {
     public static final int TYPE_RECEIVE = 0;
     public static final int TYPE_SEND = 1;
 
+    private Friend friend;
     private String msg;
     private long timestamp;
+    private int type;
 
-    public Message(String msg, long timestamp) {
+    public Message(Friend friend, String msg, long timestamp, int type) {
+        this.friend = friend;
         this.msg = msg;
         this.timestamp = timestamp;
+        this.type = type;
     }
 
     public String getMsg() {
@@ -29,5 +35,21 @@ public class Message {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public Friend getFriend() {
+        return friend;
+    }
+
+    public void setFriend(Friend friend) {
+        this.friend = friend;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }
