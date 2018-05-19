@@ -141,6 +141,9 @@ public class ReceiveThread implements Runnable {
                 }
             }
             makeNotification(ctx);
+            //设置主界面小红点
+            int num = ClientApp.getMsgNotifyBadge().getNumber() + 1;
+            ClientApp.getMsgNotifyBadge().setNumber(num).show();
         }
 
         private void makeNotification(Context ctx) {

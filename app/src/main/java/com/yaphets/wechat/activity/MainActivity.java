@@ -25,7 +25,6 @@ import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
-import com.ashokvarma.bottomnavigation.TextBadgeItem;
 import com.yaphets.wechat.ClientApp;
 import com.yaphets.wechat.R;
 import com.yaphets.wechat.asynctask.PullMsgTask;
@@ -33,6 +32,7 @@ import com.yaphets.wechat.database.entity.UserInfo;
 import com.yaphets.wechat.service.HeartBeatService;
 import com.yaphets.wechat.ui.fragment.BaseFragment;
 import com.yaphets.wechat.ui.fragment.FragmentFactory;
+import com.yaphets.wechat.ui.view.HTextBadge;
 import com.yaphets.wechat.ui.view.MyViewPager;
 import com.yaphets.wechat.util.RequestParam;
 
@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ViewPager mViewPager;
     private BottomNavigationBar mBottomNavigationBar;
-    private TextBadgeItem mMsgNotifyBadge;
-    private TextBadgeItem mApplyNotifyBadge;
+    private HTextBadge mMsgNotifyBadge;
+    private HTextBadge mApplyNotifyBadge;
 
     private UserInfo _userInfo;
     private View _headerView;
@@ -152,10 +152,11 @@ public class MainActivity extends AppCompatActivity {
         mBottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED);
         mBottomNavigationBar.setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC);
 
-        mMsgNotifyBadge = new TextBadgeItem().hide()
-                .setBackgroundColor(Color.RED);//设置角标内容
-        mApplyNotifyBadge = new TextBadgeItem().hide()
-                .setBackgroundColor(Color.RED);
+        mMsgNotifyBadge = new HTextBadge();
+        mMsgNotifyBadge.hide().setBackgroundColor(Color.RED);//设置角标内容
+        mApplyNotifyBadge = new HTextBadge();
+        mApplyNotifyBadge.hide().setBackgroundColor(Color.RED);
+
         ClientApp.setMsgNotifyBadge(mMsgNotifyBadge);
         ClientApp.setApplyNotifyBadge(mApplyNotifyBadge);
 
@@ -173,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(int position) {
                 if (position == 0) {
-                    mMsgNotifyBadge.setText("");
+                    mMsgNotifyBadge.setNumber(0);
                     if (!mMsgNotifyBadge.isHidden())
                         mMsgNotifyBadge.hide();
                 }
@@ -213,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        new PullMsgTask().execute();
+        ClientApp._handler.postDelayed(new PullMsgTask()::execute, 500);
     }
 
     @Override

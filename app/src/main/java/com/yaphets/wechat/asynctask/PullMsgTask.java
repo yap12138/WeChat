@@ -46,7 +46,7 @@ public class PullMsgTask extends AsyncTask<String, Integer, List<Message>> {
         }
 
         DialogueAdapter.getInstance().notifyDataSetChanged();
-        ClientApp.getMsgNotifyBadge().setText("" +  messages.size()).show();
+        ClientApp.getMsgNotifyBadge().setNumber(messages.size()).show();
         //TODO 每个dialogue设置红点
 
         Context ctx = ClientApp.getContext();

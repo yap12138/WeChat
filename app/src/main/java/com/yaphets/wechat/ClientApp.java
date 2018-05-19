@@ -7,10 +7,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
-import com.ashokvarma.bottomnavigation.TextBadgeItem;
 import com.yaphets.wechat.database.entity.Dialogue;
 import com.yaphets.wechat.database.entity.Friend;
 import com.yaphets.wechat.database.entity.UserInfo;
+import com.yaphets.wechat.ui.view.HTextBadge;
 import com.yaphets.wechat.util.MyActivityManager;
 import com.yaphets.wechat.util.RequestParam;
 
@@ -55,8 +55,8 @@ public class ClientApp extends LitePalApplication {
 
     private static HashMap<String, Object> _attribute = new HashMap<>();
 
-    private static TextBadgeItem _msgNotifyBadge;
-    private static TextBadgeItem _applyNotifyBadge;
+    private static HTextBadge _msgNotifyBadge;
+    private static HTextBadge _applyNotifyBadge;
 
     @Override
     public void onCreate() {
@@ -119,19 +119,19 @@ public class ClientApp extends LitePalApplication {
         _attribute.put(key, value);
     }
 
-    public static TextBadgeItem getMsgNotifyBadge() {
+    public static HTextBadge getMsgNotifyBadge() {
         return _msgNotifyBadge;
     }
 
-    public static void setMsgNotifyBadge(TextBadgeItem _msgNotifyBadge) {
+    public static void setMsgNotifyBadge(HTextBadge _msgNotifyBadge) {
         ClientApp._msgNotifyBadge = _msgNotifyBadge;
     }
 
-    public static TextBadgeItem getApplyNotifyBadge() {
+    public static HTextBadge getApplyNotifyBadge() {
         return _applyNotifyBadge;
     }
 
-    public static void setApplyNotifyBadge(TextBadgeItem _applyNotifyBadge) {
+    public static void setApplyNotifyBadge(HTextBadge _applyNotifyBadge) {
         ClientApp._applyNotifyBadge = _applyNotifyBadge;
     }
 
