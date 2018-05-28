@@ -84,7 +84,7 @@ public class ContactFragment extends BaseFragment {
      */
     public void notifyApply(int size) {
         _redPoint.setVisibility(View.VISIBLE);
-        ClientApp.getApplyNotifyBadge().setNumber(ClientApp.getApplyNotifyBadge().getNumber() + size).show();
+        ClientApp.getApplyNotifyBadge().setNumber(ClientApp.getApplyNotifyBadge().getNumber() + size);
     }
 
     /**

@@ -8,6 +8,11 @@ public class HTextBadge extends TextBadgeItem {
     public TextBadgeItem setNumber(int number) {
         mNumber = number;
         setText(String.valueOf(mNumber));
+        if (mNumber > 0) {
+            show();
+        } else {
+            hide();
+        }
         return this;
     }
 
