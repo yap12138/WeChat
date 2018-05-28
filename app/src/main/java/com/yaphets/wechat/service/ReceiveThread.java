@@ -2,6 +2,7 @@ package com.yaphets.wechat.service;
 
 import android.app.Activity;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -32,6 +33,9 @@ public class ReceiveThread implements Runnable {
     private static final int SEND_MSG = 3;
     private static final int REPLY_FRIEND = 4;
     private static final int FOCUS_LOGOUT = 5;
+
+    private static final String id = "channel_1";
+    private static final String name = "channel_name_1";
 
     private Socket _socket;
 
@@ -157,7 +161,9 @@ public class ReceiveThread implements Runnable {
             Notification.Builder builder = new Notification.Builder(ctx);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                builder = new Notification.Builder(ctx, null);
+                NotificationChannel channel = new NotificationChannel(id, name, NotificationManager.IMPORTANCE_DEFAULT);
+                manager.createNotificationChannel(channel);
+                builder = new Notification.Builder(ctx, id);
             }
 
             Notification notification = builder
