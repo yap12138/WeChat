@@ -22,9 +22,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     private static ContactAdapter mContactAdapter;
 
     public static ContactAdapter createInstance(Map<String, Friend> friends) {
-        if (mContactAdapter == null) {
-            mContactAdapter = new ContactAdapter(friends);
-        }
+        mContactAdapter = new ContactAdapter(friends);
         return mContactAdapter;
     }
 

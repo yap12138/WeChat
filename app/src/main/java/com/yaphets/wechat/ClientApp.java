@@ -135,6 +135,11 @@ public class ClientApp extends LitePalApplication {
         ClientApp._applyNotifyBadge = _applyNotifyBadge;
     }
 
+    public static void clearCacheData() {
+        _dialogueMap.clear();
+        _friendsMap.clear();
+    }
+
     static class MyActivityLifecycleCallbacks implements ActivityLifecycleCallbacks {
 
         @Override

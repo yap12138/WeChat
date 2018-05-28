@@ -22,9 +22,7 @@ public class DialogueAdapter extends RecyclerView.Adapter<DialogueAdapter.ViewHo
     private static DialogueAdapter mDialogueAdapter;
 
     public static DialogueAdapter createInstance(List<Dialogue> dialogues) {
-        if (mDialogueAdapter == null) {
-            mDialogueAdapter = new DialogueAdapter(dialogues);
-        }
+        mDialogueAdapter = new DialogueAdapter(dialogues);
         return mDialogueAdapter;
     }
 

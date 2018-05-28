@@ -337,6 +337,9 @@ public class MainActivity extends AppCompatActivity {
         ClientApp.set_loginUserinfo(null);
         ClientApp._password = null;
 
+        //清除数据
+        ClientApp.clearCacheData();
+
         Intent stopitent = new Intent(this, HeartBeatService.class);
         stopService(stopitent);
 
