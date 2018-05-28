@@ -86,14 +86,14 @@ public class CommunicateActivity extends BaseActionBarActivity {
         }
         _dialogue = ClientApp._dialogueMap.get(_fnname);
 
-        //TODO load msg
+        // load msg
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         _msgList.setLayoutManager(linearLayoutManager);
         MsgAdapter adapter = new MsgAdapter(_dialogue.getFriend());
         _msgList.setAdapter(adapter);
         //滑动到底部
         _msgList.scrollToPosition(_msgList.getAdapter().getItemCount() - 1);
-        //TODO init send msg listener
+        //init send msg listener
         _sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,6 +115,10 @@ public class CommunicateActivity extends BaseActionBarActivity {
                 new SendMsgTask(msg).execute();
             }
         });
+
+        //消去小红点
+        ClientApp.getMsgNotifyBadge().setNumber(ClientApp.getMsgNotifyBadge().getNumber() - _dialogue.getNonRead());
+        _dialogue.setNonRead(0);
     }
 
     /**

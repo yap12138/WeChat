@@ -1,6 +1,7 @@
 package com.yaphets.wechat.asynctask;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -19,6 +20,10 @@ import com.yaphets.wechat.database.entity.Message;
 import java.util.List;
 
 public class PullMsgTask extends AsyncTask<String, Integer, List<Message>> {
+
+    private static final String id = "channel_1";
+    private static final String name = "channel_name_1";
+
     @Override
     protected List<Message> doInBackground(String... strings) {
         //拉取未读消息，notify用户 记录次数
@@ -47,7 +52,6 @@ public class PullMsgTask extends AsyncTask<String, Integer, List<Message>> {
 
         DialogueAdapter.getInstance().notifyDataSetChanged();
         ClientApp.getMsgNotifyBadge().setNumber(messages.size());
-        //TODO 每个dialogue设置红点
 
         Context ctx = ClientApp.getContext();
 
@@ -55,10 +59,16 @@ public class PullMsgTask extends AsyncTask<String, Integer, List<Message>> {
         Notification.Builder builder = new Notification.Builder(ctx);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            builder = new Notification.Builder(ctx, null);
+            NotificationChannel channel = new NotificationChannel(id, name, NotificationManager.IMPORTANCE_DEFAULT);
+            manager.createNotificationChannel(channel);
+            builder = new Notification.Builder(ctx, id);
         }
 
         for (Message msg : messages) {
+            //每个dialogue设置红点
+            Dialogue cur = ClientApp._dialogueMap.get(msg.getFriend().getNickname());
+            cur.setNonRead(cur.getNonRead() + 1);
+
             Intent intent = new Intent(ctx, CommunicateActivity.class);
             intent.putExtra("fri_key", msg.getFriend().getNickname());
             PendingIntent pi = PendingIntent.getActivity(ctx, msg.getFriend().hashCode(), intent, 0);

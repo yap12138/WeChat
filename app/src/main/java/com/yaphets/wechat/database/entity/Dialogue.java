@@ -12,9 +12,11 @@ public class Dialogue {
 
     private long createTime;
 
+    private int nonRead;
+
     public Dialogue(Friend friend) {
         this.friend = friend;
-
+        this.nonRead = 0;
         this.createTime = System.currentTimeMillis();
     }
 
@@ -26,6 +28,10 @@ public class Dialogue {
     public List<Message> getMsgList() {
         return friend.getMessages();
     }
+
+    public int getNonRead() { return this.nonRead; }
+
+    public void setNonRead(int nonRead) { this.nonRead = nonRead;}
 
     public String getLastTime() {
         List<Message> msgList = friend.getMessages();

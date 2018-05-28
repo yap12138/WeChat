@@ -16,6 +16,7 @@ import com.yaphets.wechat.activity.CommunicateActivity;
 import com.yaphets.wechat.adapter.DialogueAdapter;
 import com.yaphets.wechat.database.dao.MySqlHelper;
 import com.yaphets.wechat.database.entity.Apply;
+import com.yaphets.wechat.database.entity.Dialogue;
 import com.yaphets.wechat.database.entity.Friend;
 import com.yaphets.wechat.database.entity.Message;
 import com.yaphets.wechat.ui.fragment.ContactFragment;
@@ -145,9 +146,12 @@ public class ReceiveThread implements Runnable {
                 }
             }
             makeNotification(ctx);
+            //设置个人小红点
+            Dialogue cur = ClientApp._dialogueMap.get(_msg.getFriend().getNickname());
+            cur.setNonRead(cur.getNonRead() + 1);
             //设置主界面小红点
             int num = ClientApp.getMsgNotifyBadge().getNumber() + 1;
-            ClientApp.getMsgNotifyBadge().setNumber(num).show();
+            ClientApp.getMsgNotifyBadge().setNumber(num);
         }
 
         private void makeNotification(Context ctx) {
