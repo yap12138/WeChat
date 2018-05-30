@@ -173,11 +173,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTabSelected(int position) {
-                if (position == 0) {
+                /*if (position == 0) {
                     mMsgNotifyBadge.setNumber(0);
                     if (!mMsgNotifyBadge.isHidden())
                         mMsgNotifyBadge.hide();
-                }
+                }*/
                 if (mViewPager.getCurrentItem() != position) {
                     mViewPager.setCurrentItem(position, false);
                 }

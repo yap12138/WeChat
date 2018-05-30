@@ -204,6 +204,13 @@ public class ReceiveThread implements Runnable {
             makeNotification(ctx);
             //设置个人小红点
             Dialogue cur = ClientApp._dialogueMap.get(_msg.getFriend().getNickname());
+            if (cur == null) {
+                Friend tmp = ClientApp._friendsMap.get(_msg.getFriend().getNickname());
+                Dialogue dialogue = new Dialogue(tmp);
+                ClientApp._dialogueMap.put(_msg.getFriend().getNickname(), dialogue);
+                DialogueAdapter.getInstance().updateDataSetWithNotify(ClientApp._dialogueMap);
+                cur = dialogue;
+            }
             cur.setNonRead(cur.getNonRead() + 1);
             //设置主界面小红点
             int num = ClientApp.getMsgNotifyBadge().getNumber() + 1;
@@ -214,7 +221,7 @@ public class ReceiveThread implements Runnable {
 
             Intent intent = new Intent(ctx, CommunicateActivity.class);
             intent.putExtra("fri_key", _msg.getFriend().getNickname());
-            PendingIntent pi = PendingIntent.getActivity(ctx, 0, intent, 0);
+            PendingIntent pi = PendingIntent.getActivity(ctx, _msg.getFriend().hashCode(), intent, 0);
 
 
             NotificationManager manager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
