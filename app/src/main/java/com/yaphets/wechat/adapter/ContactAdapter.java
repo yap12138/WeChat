@@ -85,7 +85,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(ClientApp.getContext(), FriendDetailActivity.class);
-            intent.putExtra("friend", friend.getNickname());
+            intent.putExtra("friend", friend);
             ClientApp.getContext().startActivity(intent);
         }
     }

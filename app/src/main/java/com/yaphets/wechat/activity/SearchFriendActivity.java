@@ -58,7 +58,7 @@ public class SearchFriendActivity extends AppCompatActivity {
                         @Override
                         public void onFinish(Friend friend) {
                             Intent intent = new Intent(SearchFriendActivity.this, FriendDetailActivity.class);
-                            intent.putExtra("friend", friend.getNickname());
+                            intent.putExtra("friend", friend);
                             startActivity(intent);
                         }
 

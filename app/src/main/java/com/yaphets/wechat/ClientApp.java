@@ -34,7 +34,7 @@ public class ClientApp extends LitePalApplication {
     public static String _password;
 
     public static final String _serverIP = "120.78.139.85";
-    //public static final String _serverIP = "172.18.174.178";
+    //public static final String _serverIP = "172.18.175.176";
 
     public static final int _serverPort = 8495;
 

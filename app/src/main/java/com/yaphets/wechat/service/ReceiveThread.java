@@ -13,7 +13,9 @@ import android.util.Log;
 import com.yaphets.wechat.ClientApp;
 import com.yaphets.wechat.R;
 import com.yaphets.wechat.activity.CommunicateActivity;
+import com.yaphets.wechat.activity.GroupChatsActivity;
 import com.yaphets.wechat.adapter.DialogueAdapter;
+import com.yaphets.wechat.adapter.GroupMsgAdapter;
 import com.yaphets.wechat.database.dao.MySqlHelper;
 import com.yaphets.wechat.database.entity.Apply;
 import com.yaphets.wechat.database.entity.Dialogue;
@@ -31,9 +33,12 @@ import java.net.Socket;
 public class ReceiveThread implements Runnable {
     private static final String TAG = "ReceiveThread";
     private static final int REQUEST_FRIEND = 2;
-    private static final int SEND_MSG = 3;
+    private static final int RECEIVE_MSG = 3;
     private static final int REPLY_FRIEND = 4;
-    private static final int FOCUS_LOGOUT = 5;
+    private static final int ATTACH_GC = 5;
+    private static final int DETACH_GC = -5;
+    private static final int RECEIVE_GROUP_MSG = 6;
+    private static final int FOCUS_LOGOUT = 10;
 
     private static final String id = "channel_1";
     private static final String name = "channel_name_1";
@@ -66,7 +71,7 @@ public class ReceiveThread implements Runnable {
                         ClientApp._handler.post(new FriendRequest(receive));
                         break;
                     }
-                    case SEND_MSG:  //接收消息
+                    case RECEIVE_MSG:  //接收消息
                     {
                         String msg = dis.readUTF();
                         String fnname = dis.readUTF();
@@ -83,6 +88,57 @@ public class ReceiveThread implements Runnable {
                         String funame = dis.readUTF();
                         Friend friend = MySqlHelper.searchFriend(funame);
                         ClientApp._handler.post(new FriendReply(friend));
+                        break;
+                    }
+                    case ATTACH_GC:
+                    {
+                        String username = dis.readUTF();
+                        GroupMsgAdapter.getInstance().testFriend(username);
+                        Activity activity = MyActivityManager.getInstance().getCurrentActivity();
+                        if (activity instanceof GroupChatsActivity) {
+                            ClientApp._handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    GroupChatsActivity gcAcitvity = (GroupChatsActivity) activity;
+                                    gcAcitvity.userEnter(username);
+                                }
+                            });
+                        }
+                        break;
+                    }
+                    case DETACH_GC:
+                    {
+                        String username = dis.readUTF();
+
+                        Activity activity = MyActivityManager.getInstance().getCurrentActivity();
+                        if (activity instanceof GroupChatsActivity) {
+                            ClientApp._handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    GroupChatsActivity gcAcitvity = (GroupChatsActivity) activity;
+                                    gcAcitvity.userExit(username);
+                                }
+                            });
+                        }
+                        break;
+                    }
+                    case RECEIVE_GROUP_MSG:
+                    {
+                        String funame = dis.readUTF();
+                        String msg = dis.readUTF();
+                        GroupMsgAdapter.getInstance().testFriend(funame);
+                        Friend friend = GroupMsgAdapter.getInstance().getFriend(funame);
+                        Message message = new Message(friend, msg, System.currentTimeMillis(), Message.TYPE_RECEIVE);
+                        Activity activity = MyActivityManager.getInstance().getCurrentActivity();
+                        if (activity instanceof GroupChatsActivity) {
+                            ClientApp._handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    GroupChatsActivity gcAcitvity = (GroupChatsActivity) activity;
+                                    gcAcitvity.addMsg(message);
+                                }
+                            });
+                        }
                         break;
                     }
                     case FOCUS_LOGOUT: //TODO 强制下线

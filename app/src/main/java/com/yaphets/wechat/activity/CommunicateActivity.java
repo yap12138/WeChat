@@ -111,7 +111,7 @@ public class CommunicateActivity extends BaseActionBarActivity {
                 //notify msg list
                 _msgList.getAdapter().notifyDataSetChanged();
                 _msgList.scrollToPosition(_msgList.getAdapter().getItemCount() - 1);
-                //TODO president task to remote server
+                //president task to remote server
                 new SendMsgTask(msg).execute();
             }
         });

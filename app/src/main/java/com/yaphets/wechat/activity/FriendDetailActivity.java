@@ -24,20 +24,30 @@ public class FriendDetailActivity extends BaseActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_detail);
 
-        _friend = ClientApp._friendsMap.get(getIntent().getStringExtra("friend"));
+        _friend = getIntent().getParcelableExtra("friend");
+        if (ClientApp._friendsMap.containsKey(_friend.getNickname())) {
+            _friend = ClientApp._friendsMap.get(_friend.getNickname());
+        }
+
         initView();
         initData();
     }
 
     private void initView() {
         ImageView img = findViewById(R.id.fda_iv_thumb);
-        img.setImageBitmap(_friend.getThumbBitmap());
+
         TextView nickname = findViewById(R.id.fda_tv_nickname);
-        nickname.setText(_friend.getNickname());
+
         TextView username = findViewById(R.id.fda_tv_username);
-        username.setText(_friend.getUsername());
+
         TextView desc = findViewById(R.id.fda_tv_desc);
-        desc.setText(_friend.getDescription());
+
+        if (_friend != null) {
+            img.setImageBitmap(_friend.getThumbBitmap());
+            nickname.setText(_friend.getNickname());
+            username.setText(_friend.getUsername());
+            desc.setText(_friend.getDescription());
+        }
     }
 
     private void initData() {

@@ -2,6 +2,8 @@ package com.yaphets.wechat.database.entity;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.yaphets.wechat.ClientApp;
 import com.yaphets.wechat.R;
@@ -13,7 +15,7 @@ import org.litepal.crud.DataSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Friend extends DataSupport {
+public class Friend extends DataSupport implements Parcelable{
     @Column(unique = true)
     private String username;
     private String nickname;
@@ -42,6 +44,26 @@ public class Friend extends DataSupport {
         this.description = description;
         this.username = username;
     }
+
+    protected Friend(Parcel in) {
+        username = in.readString();
+        nickname = in.readString();
+        description = in.readString();
+        thumb = in.createByteArray();
+        friendshipPolicy = in.readInt();
+    }
+
+    public static final Creator<Friend> CREATOR = new Creator<Friend>() {
+        @Override
+        public Friend createFromParcel(Parcel in) {
+            return new Friend(in);
+        }
+
+        @Override
+        public Friend[] newArray(int size) {
+            return new Friend[size];
+        }
+    };
 
     public String getUsername() {
         return username;
@@ -127,5 +149,19 @@ public class Friend extends DataSupport {
         }
 
         return flag;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.username);
+        dest.writeString(this.nickname);
+        dest.writeString(this.description);
+        dest.writeByteArray(this.thumb);
+        dest.writeInt(this.friendshipPolicy);
     }
 }

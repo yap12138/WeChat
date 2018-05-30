@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/search"
+        android:id="@+id/chatSetting"
         android:icon="@drawable/ca_tb_people"
         android:title="聊天设置"
         app:showAsAction="ifRoom" />

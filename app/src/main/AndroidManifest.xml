@@ -60,9 +60,14 @@
             android:theme="@style/ActionBarTheme" />
         <activity
             android:name=".activity.CommunicateActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"
             android:launchMode="singleTask"
-            android:theme="@style/ActionBarTheme"/>
+            android:theme="@style/ActionBarTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name=".activity.GroupChatsActivity"
+            android:label="官方群聊"
+            android:theme="@style/ActionBarTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
     </application>
 
 </manifest>

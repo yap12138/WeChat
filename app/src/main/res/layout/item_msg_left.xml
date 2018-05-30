@@ -17,6 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/iv_thumb"
+        android:layout_below="@id/tv_nickname"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="4dp"
@@ -24,4 +25,15 @@
         android:background="@drawable/message_left"
         android:gravity="center_vertical"
         android:layout_centerVertical="true"/>
+
+    <TextView
+        android:id="@+id/tv_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/iv_thumb"
+        android:layout_alignTop="@id/iv_thumb"
+        android:layout_marginStart="16dp"
+        android:visibility="gone"
+        android:textSize="12sp"
+        android:text="yappp" />
 </RelativeLayout>
